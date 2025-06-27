@@ -110,6 +110,7 @@ blogRouter.get("/bulk", async (c) => {
         title : true,
         id : true,
         content : true,
+        publishedAt : true,
         author : {
           select : {
             name : true
@@ -139,6 +140,7 @@ blogRouter.get("/:id", async (c) => {
         id : true,
         title : true,
         content : true,
+        publishedAt : true,
         author: {
           select : {
             name : true,

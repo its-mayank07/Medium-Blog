@@ -1,5 +1,5 @@
-import Auth from "../Auth";
-import Quote from "../Quote";
+import Auth from "../components/Auth";
+import Quote from "../components/Quote";
 
 const Signup = () => {
   return (

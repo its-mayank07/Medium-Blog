@@ -3,7 +3,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-06-25",
   "vars": {
-	"DATABASE_URL": "",
-  "JWT_SECRET_KEY" : ""
+	"DATABASE_URL": "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMDFKWUpXSjM0S1JDQldLRENYUVNFV0pTMk4iLCJ0ZW5hbnRfaWQiOiIwODUxZDViMmE0ZTJhNDg5NmY0ZTkyM2Q5NjQ1MWNmZjczODc5MWY3YmRmMzBjZDcyNTBkNzAyNDBkNzYyM2Q4IiwiaW50ZXJuYWxfc2VjcmV0IjoiMTU1NjdlNTYtMTFkZi00MTk1LWI3NTctNDUzYzA5MDJhOGVkIn0.kfFlInTzXOKB7DjYC3O2qEW1WphkNbsNoWJ4dJbDzXg",
+  "JWT_SECRET_KEY" : "hellobhai"
 },
 }
