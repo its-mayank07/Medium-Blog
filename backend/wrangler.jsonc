@@ -1,0 +1,9 @@
+{
+  "name": "backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-25",
+  "vars": {
+	"DATABASE_URL": "",
+  "JWT_SECRET_KEY" : ""
+},
+}
