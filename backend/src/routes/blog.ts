@@ -128,6 +128,38 @@ blogRouter.get("/bulk", async (c) => {
   }
 });
 
+blogRouter.get("/us", async (c) => {
+  try {
+    const prisma = getPrisma(c.env.DATABASE_URL);
+    const userId = c.get("userId");
+
+
+     const blog = await prisma.post.findMany({
+      where : {
+        authorId : userId
+      },
+      select : {
+        title : true,
+        id : true,
+        content : true,
+        publishedAt : true,
+        author : {
+          select : {
+            name : true
+          }
+        }
+      }
+     });
+
+    return c.json({ blog });
+  } catch (error) {
+    c.status(500);
+    return c.json({
+      error: "Error while fetching the blogs of the user",
+    });
+  }
+});
+
 // GET /:id - Fetch single blog by ID
 blogRouter.get("/:id", async (c) => {
   try {
@@ -157,5 +189,27 @@ blogRouter.get("/:id", async (c) => {
     });
   }
 });
+
+blogRouter.delete("/:id", async (c) => {
+  try {
+    const prisma = getPrisma(c.env.DATABASE_URL);
+    const blogId = c.req.param("id");
+
+    const blog = await prisma.post.delete({
+      where : {
+        id : blogId
+      }
+    });
+
+    return c.json({message : "Blog deleted successfully"})
+  } catch (error) {
+    c.status(500);
+    return c.json({
+      error: "Error while fetching the blog",
+    });
+  }
+});
+
+
 
 export default blogRouter;

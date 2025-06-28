@@ -4,6 +4,7 @@ import { useState } from "react";
 import { type SignupInput, type SigninInput } from "@its.mayank7/medium-common";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import { BiErrorCircle } from "react-icons/bi";
 
 type AuthInput = SignupInput | SigninInput;
 
@@ -14,24 +15,24 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
       : { email: "", password: "" }
   );
   const navigate = useNavigate();
+  const [isInvalid, setIsInvalid] = useState(false); // initially false
 
   async function sendRequest() {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,postInputs);
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
+        postInputs
+      );
       const jwt = response.data.jwt;
-      // console.log(jwt);
-      
+
       localStorage.setItem("token", jwt);
-      navigate("/blogs")
+      setIsInvalid(false);
+      navigate("/blogs");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        alert("An error occurred. Please try again.");
+        setIsInvalid(true); // Show error
       } else {
-        if (typeof error === "object" && error !== null && "message" in error) {
-          alert((error as { message: string }).message);
-        } else {
-          alert("An unknown error occurred.");
-        }
+        alert("An unknown error occurred.");
       }
     }
   }
@@ -71,7 +72,7 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
             />
           )}
           <LabelledInput
-            label="email"
+            label="Email"
             placeholder="Enter your email"
             onChange={(e) => {
               setPostInputs((c) => ({
@@ -81,8 +82,8 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
             }}
           />
           <LabelledInput
-            type={"password"}
-            label="password"
+            type="password"
+            label="Password"
             placeholder="Enter your password"
             onChange={(e) => {
               setPostInputs((c) => ({
@@ -91,6 +92,19 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
               }));
             }}
           />
+
+          {isInvalid && (
+            <div
+              className="flex items-center gap-2 text-sm text-red-600 bg-red-100 px-3 py-2 rounded-md mt-1 border border-red-300"
+              style={{
+                animation: "fadeIn 0.3s ease-in-out",
+              }}
+            >
+              <BiErrorCircle className="text-lg" />
+              Invalid email or password.
+            </div>
+          )}
+
           <button
             onClick={sendRequest}
             type="button"
