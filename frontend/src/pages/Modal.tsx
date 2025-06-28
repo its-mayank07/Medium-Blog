@@ -11,32 +11,38 @@ const Modal = () => {
   const [updatedContent, setUpdatedContent] = useState(content);
   const { id } = useParams();
   const navigate = useNavigate();
-  
-    useEffect(() => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/signin");
-      }
-    }, [navigate]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/signin");
+    }
+  }, [navigate]);
 
   return (
-    <div>
-      <AppBar/>
+    <div className="min-h-screen bg-white">
+      <AppBar />
 
-      <div className="max-w-3xl mx-auto px-4 py-10">
-        {/* Title input and Modal button */}
-        <div className="flex items-center gap-4 mb-6">
-          {/* Title input */}
-          <input
-            value={updatedTitle}
-            onChange={(e) => setUpdatedTitle(e.target.value)}
-            type="text"
-            placeholder="Title"
-            className="flex-1 text-5xl font-semibold placeholder-gray-400 text-gray-900 focus:outline-none"
-          />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-10 py-8 sm:py-12">
+        {/* Title input */}
+        <input
+          value={updatedTitle}
+          onChange={(e) => setUpdatedTitle(e.target.value)}
+          type="text"
+          placeholder="Title"
+          className="w-full text-3xl sm:text-4xl md:text-5xl font-semibold placeholder-gray-400 text-gray-900 focus:outline-none mb-6"
+        />
 
-          {/* Circular Modal button */}
+        {/* Content textarea */}
+        <textarea
+          value={updatedContent}
+          onChange={(e) => setUpdatedContent(e.target.value)}
+          placeholder="Tell your story..."
+          className="w-full text-base sm:text-lg placeholder-gray-500 text-gray-800 focus:outline-none min-h-[300px] resize-none"
+        />
+
+        {/* Update Blog button */}
+        <div className="flex justify-end mt-6">
           <button
             onClick={async () => {
               try {
@@ -49,7 +55,7 @@ const Modal = () => {
                   },
                   {
                     headers: {
-                      Authorization: localStorage.getItem("token"),
+                      Authorization: localStorage.getItem("token") || "",
                     },
                   }
                 );
@@ -59,10 +65,8 @@ const Modal = () => {
                   typeof error === "object" &&
                   error !== null &&
                   "response" in error &&
-                  typeof (error as { response?: { status?: number } })
-                    .response === "object" &&
-                  (error as { response?: { status?: number } }).response
-                    ?.status === 401
+                  typeof (error as { response?: { status?: number } }).response === "object" &&
+                  (error as { response?: { status?: number } }).response?.status === 401
                 ) {
                   navigate("/signup");
                 }
@@ -73,14 +77,6 @@ const Modal = () => {
             Update Blog
           </button>
         </div>
-
-        {/* Content textarea */}
-        <textarea
-          value={updatedContent}
-          onChange={(e) => setUpdatedContent(e.target.value)}
-          placeholder="Tell your story..."
-          className="w-full text-lg placeholder-gray-500 text-gray-800 focus:outline-none min-h-[300px] resize-none"
-        />
       </div>
     </div>
   );

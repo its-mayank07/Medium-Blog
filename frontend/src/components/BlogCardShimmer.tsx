@@ -19,6 +19,8 @@ const BlogCardShimmer = () => {
           <div className="h-4 bg-gray-300 rounded w-full" />
           <div className="h-4 bg-gray-300 rounded w-11/12" />
           <div className="h-4 bg-gray-300 rounded w-2/3" />
+          <div className="h-4 bg-gray-300 rounded w-3/4" />
+          <div className="h-4 bg-gray-300 rounded w-1/2" />
         </div>
 
         {/* Reading time placeholder */}
