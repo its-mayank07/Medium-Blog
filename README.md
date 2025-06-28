@@ -134,8 +134,7 @@ Note: Protected routes require JWT in Authorization header.
 👨‍💻 Author
 Mayank Maini
 🔗 GitHub
-📧 mayankmaini04@gmail.com
-🐦 Twitter
+📧 itsurmayank7@gmail.com
 
 📄 License
 This project is licensed under the MIT License. See the LICENSE file for details.
