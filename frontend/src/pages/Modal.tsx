@@ -4,6 +4,19 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
+// Simple Loading component
+const Loading = () => (
+  <div className="flex justify-center items-center min-h-screen">
+    <div className="flex flex-col items-center">
+      <svg className="animate-spin h-8 w-8 text-gray-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <div className="text-gray-600 text-lg font-medium">Updating...</div>
+    </div>
+  </div>
+);
+
 const Modal = () => {
   const location = useLocation();
   const { title, content } = location.state || {};
@@ -11,6 +24,7 @@ const Modal = () => {
   const [updatedContent, setUpdatedContent] = useState(content);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,6 +32,40 @@ const Modal = () => {
       navigate("/signin");
     }
   }, [navigate]);
+
+  const handleUpdate = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.put(
+        `${BACKEND_URL}/api/v1/blog`,
+        {
+          id: id,
+          title: updatedTitle,
+          content: updatedContent,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token") || "",
+          },
+        }
+      );
+      navigate(`/blog/${response.data.id}`);
+    } catch (error: unknown) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as { response?: { status?: number } }).response === "object" &&
+        (error as { response?: { status?: number } }).response?.status === 401
+      ) {
+        navigate("/signup");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <Loading />;
 
   return (
     <div className="min-h-screen bg-white">
@@ -44,37 +92,11 @@ const Modal = () => {
         {/* Update Blog button */}
         <div className="flex justify-end mt-6">
           <button
-            onClick={async () => {
-              try {
-                const response = await axios.put(
-                  `${BACKEND_URL}/api/v1/blog`,
-                  {
-                    id: id,
-                    title: updatedTitle,
-                    content: updatedContent,
-                  },
-                  {
-                    headers: {
-                      Authorization: localStorage.getItem("token") || "",
-                    },
-                  }
-                );
-                navigate(`/blog/${response.data.id}`);
-              } catch (error: unknown) {
-                if (
-                  typeof error === "object" &&
-                  error !== null &&
-                  "response" in error &&
-                  typeof (error as { response?: { status?: number } }).response === "object" &&
-                  (error as { response?: { status?: number } }).response?.status === 401
-                ) {
-                  navigate("/signup");
-                }
-              }
-            }}
+            onClick={handleUpdate}
             className="rounded-full bg-gray-900 text-white px-5 py-2 text-sm font-medium hover:bg-gray-800 transition-all whitespace-nowrap"
+            disabled={loading}
           >
-            Update Blog
+            {loading ? "Updating..." : "Update Blog"}
           </button>
         </div>
       </div>

@@ -10,6 +10,16 @@ import { setUserId } from "../stored/InfoSlicer";
 
 type AuthInput = SignupInput | SigninInput;
 
+const Loading = ({ type }: { type: "signup" | "signin" }) => (
+  <div className="flex justify-center items-center py-4">
+    <svg className="animate-spin h-6 w-6 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+    </svg>
+    <span className="ml-2 text-gray-700">Signing {type === "signup" ? "up" : "in"}...</span>
+  </div>
+);
+
 const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const [postInputs, setPostInputs] = useState<AuthInput>(
     type === "signup"
@@ -20,8 +30,10 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
 
   const navigate = useNavigate();
   const [isInvalid, setIsInvalid] = useState(false); // initially false
+  const [loading, setLoading] = useState(false);
 
   async function sendRequest() {
+    setLoading(true);
     try {
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
@@ -40,6 +52,8 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
       } else {
         alert("An unknown error occurred.");
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -111,10 +125,13 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
             </div>
           )}
 
+          {loading && <Loading type={type} />}
+
           <button
             onClick={sendRequest}
             type="button"
             className="mt-2 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition-colors"
+            disabled={loading}
           >
             {type === "signup" ? "Sign Up" : "Sign In"}
           </button>
