@@ -5,6 +5,8 @@ import { type SignupInput, type SigninInput } from "@its.mayank7/medium-common";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { BiErrorCircle } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { setUserId } from "../stored/InfoSlicer";
 
 type AuthInput = SignupInput | SigninInput;
 
@@ -14,6 +16,8 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
       ? { name: "", email: "", password: "" }
       : { email: "", password: "" }
   );
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [isInvalid, setIsInvalid] = useState(false); // initially false
 
@@ -24,8 +28,10 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
         postInputs
       );
       const jwt = response.data.jwt;
-
+      
       localStorage.setItem("token", jwt);
+      localStorage.setItem("userId", response.data.id);
+      dispatch(setUserId(response.data.id));
       setIsInvalid(false);
       navigate("/blogs");
     } catch (error: unknown) {

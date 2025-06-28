@@ -9,6 +9,7 @@ export interface Blog {
   content: string;
   author: {
     name: string;
+    id : string;
   };
   publishedAt: string;
 }

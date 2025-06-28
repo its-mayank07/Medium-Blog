@@ -6,11 +6,14 @@ import Blogs from './pages/Blogs'
 import Publish from './pages/Publish'
 import Home from './pages/Home'
 import MyBlogs from './pages/MyBlogs'
+import Modal from './pages/Modal';
+import { Provider } from 'react-redux'
+import store from './stored/stores'
 
 function App() {
 
   return (
-    <>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home/>} />
@@ -20,9 +23,10 @@ function App() {
           <Route path="/blog/:id" element={<Blog />} />
           <Route path='/blogs' element={<Blogs/>}/>
           <Route path='/publish' element={<Publish/>} />
+          <Route path='/blog/:id/edit' element={<Modal/>} />
         </Routes>
       </BrowserRouter>
-    </>
+    </Provider>
   )
 }
 

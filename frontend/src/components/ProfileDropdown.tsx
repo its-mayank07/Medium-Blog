@@ -1,12 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
+import Avatar from "./Avatar";
+import { useDispatch } from "react-redux";
+import { setUserId } from "../stored/InfoSlicer";
+
+
 
 const ProfileDropdown = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userId = String(localStorage.getItem("userId"));
+  const AvatarUrl = `https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(userId)}`;
+
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -21,8 +29,11 @@ const ProfileDropdown = () => {
     };
   }, []);
 
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    dispatch(setUserId(""));
     navigate("/signin");
   };
 
@@ -32,17 +43,22 @@ const ProfileDropdown = () => {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-black"
       >
-        <FaUserCircle className="text-3xl" />
+        <Avatar name={userId} size="big" isDisable = {true} />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-md z-50">
+        <div className="absolute right-0 mt-2 w-40 bg-white border pt-1 border-gray-200 rounded-lg shadow-md z-50">
           <Link
             to="/profile"
             className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            <FaUserCircle className="mr-2" /> Profile
+            <img
+              src={AvatarUrl}
+              alt="user_profile"
+              className="w-6 h-6 rounded-full bg-gray-200 mr-2"
+            />
+            <span className="font-semibold text-gray-700">Profile</span>
           </Link>
           <button
             onClick={handleLogout}

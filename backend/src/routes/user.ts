@@ -54,7 +54,7 @@ userRouter.post("/signup", async (c) => {
       c.env.JWT_SECRET_KEY
     );
 
-    return c.json({ jwt: token });
+    return c.json({ jwt: token,id : user.id });
   } catch (e: any) {
     c.status(500);
     return c.json({ error: e.message });
@@ -102,7 +102,7 @@ userRouter.post("/signin", async (c) => {
       c.env.JWT_SECRET_KEY
     );
 
-    return c.json({ jwt: token });
+    return c.json({ jwt: token,id: user.id });
   } catch (e: any) {
     c.status(500);
     return c.json({ error: "Error while signing in" });

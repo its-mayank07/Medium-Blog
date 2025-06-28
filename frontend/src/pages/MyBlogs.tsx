@@ -93,6 +93,7 @@ const MyBlogs = () => {
                 authorName={blog.author.name || "Anonymous"}
                 content={blog.content}
                 onDelete={handleDelete}
+                authorId={blog.author.id}
               />
             );
           })}

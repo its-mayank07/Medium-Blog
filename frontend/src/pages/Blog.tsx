@@ -6,10 +6,13 @@ import FullBlogShimmer from "../components/FullBlogShimmer";
 import { useEffect } from "react";
 
 
+
+
 const Blog = () => {
   const {id} = useParams()
   const {loading,blogs} = useBlog({id: id || ""});
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,7 +26,7 @@ const Blog = () => {
   }
   return (
     <div>
-      <AppBar />
+      <AppBar/>
       {blogs && <FullBlog blog={blogs} />}
     </div>
   )

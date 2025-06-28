@@ -44,7 +44,7 @@ const FullBlog = ({ blog }: { blog: Blog }) => {
       <div className="w-full lg:w-64 shrink-0 border-l border-gray-200 pl-6">
         <p className="text-sm text-gray-500 mb-2">Author</p>
         <div className="flex items-center gap-3">
-          <Avatar name= {blog.author.name || "Anonymous"} size='big' />
+          <Avatar name= {blog.author.id || "Anonymous"} size='big' />
           <div>
             <p className="font-semibold text-gray-900">{blog.author.name || "Anonymous"}</p>
             <p className="text-sm text-gray-600">{authorBio}</p>

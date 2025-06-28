@@ -1,6 +1,7 @@
 import AppBar from "../components/AppBar";
 import BlogCard from "../components/BlogCard";
 import BlogCardShimmer from "../components/BlogCardShimmer";
+import AppBarShimmer from "../components/AppBarShimmer";
 import { useBlogs } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,7 +10,6 @@ const Blogs = () => {
   const { loading, blogs: initialBlogs } = useBlogs();
   const [blogs, setBlogs] = useState(initialBlogs);
   const navigate = useNavigate();
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -17,7 +17,6 @@ const Blogs = () => {
     }
   }, [navigate]);
 
-  // 🔧 Fix: update blogs whenever initialBlogs changes
   useEffect(() => {
     setBlogs(initialBlogs);
   }, [initialBlogs]);
@@ -29,12 +28,12 @@ const Blogs = () => {
   if (loading) {
     return (
       <div>
-        <AppBar />
-        <div className="flex justify-center w-ful mt-5">
-          <div className="w-full max-w-2xl space-y-4 px-4 sm:px-6">
-            {[...Array(3)].map((_, i) => (
-              <BlogCardShimmer key={i} />
-            ))}
+        <AppBarShimmer />
+        <div className="flex justify-center mt-10 px-2 sm:px-0">
+          <div className="w-full max-w-2xl space-y-4">
+        {[...Array(3)].map((_, i) => (
+          <BlogCardShimmer key={i} />
+        ))}
           </div>
         </div>
       </div>
@@ -44,7 +43,8 @@ const Blogs = () => {
   if (blogs.length === 0) {
   return (
     <div>
-      <AppBar />
+      <AppBarShimmer />
+
       <div className="flex justify-center px-2 mt-10 sm:px-0">
         <div className="w-full max-w-2xl text-center text-gray-500 flex flex-col items-center gap-4">
           <svg
@@ -68,7 +68,7 @@ const Blogs = () => {
 
   return (
     <div>
-      <AppBar />
+      <AppBar/>
       <div className="flex justify-center px-2 mt-2 sm:px-0">
         <div className="w-full max-w-2xl space-y-4 cursor-pointer">
           {blogs.map((blog) => {
@@ -94,6 +94,7 @@ const Blogs = () => {
                 content={blog.content}
                 isAuthor={false} 
                 onDelete={handleDelete}
+                authorId={blog.author.id}
               />
             );
           })}
@@ -104,3 +105,5 @@ const Blogs = () => {
 };
 
 export default Blogs;
+
+
