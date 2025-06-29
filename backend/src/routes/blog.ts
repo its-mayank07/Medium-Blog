@@ -147,7 +147,6 @@ blogRouter.get("/us", async (c) => {
         author : {
           select : {
             name : true,
-            id : true
           }
         }
       }
@@ -178,7 +177,6 @@ blogRouter.get("/:id", async (c) => {
         author: {
           select : {
             name : true,
-            id: true
           }
         }
       }

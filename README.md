@@ -113,8 +113,6 @@ DELETE	/api/blog/:id	Delete blog by ID
 
 Note: Protected routes require JWT in Authorization header.
 
-📸 Screenshots
-(Include screenshots or GIFs of your UI here)
 
 📌 Todo / Future Improvements
  Comments system
