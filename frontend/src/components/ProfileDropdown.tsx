@@ -5,16 +5,12 @@ import Avatar from "./Avatar";
 import { useDispatch } from "react-redux";
 import { setUserId } from "../stored/InfoSlicer";
 
-
-
 const ProfileDropdown = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userId = String(localStorage.getItem("userId"));
-  const AvatarUrl = `https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(userId)}`;
-
+  const userId = sessionStorage.getItem("userId") || "Anonymous";
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -29,10 +25,9 @@ const ProfileDropdown = () => {
     };
   }, []);
 
-
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userId");
     dispatch(setUserId(""));
     navigate("/signin");
   };
@@ -43,7 +38,7 @@ const ProfileDropdown = () => {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-black"
       >
-        <Avatar name={userId} size="big" isDisable = {true} />
+        <Avatar name={userId} size="big" isDisable={true} />
       </button>
 
       {open && (
@@ -53,12 +48,8 @@ const ProfileDropdown = () => {
             className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            <img
-              src={AvatarUrl}
-              alt="user_profile"
-              className="w-6 h-6 rounded-full bg-gray-200 mr-2"
-            />
-            <span className="font-semibold text-gray-700">Profile</span>
+            <Avatar name={userId} size="small" isDisable={true} />
+            <span className="font-semibold text-gray-700 ml-2">Profile</span>
           </Link>
           <button
             onClick={handleLogout}

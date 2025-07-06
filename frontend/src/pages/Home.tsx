@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-const isLoggedIn = !!localStorage.getItem("token");
+const isLoggedIn = !!sessionStorage.getItem("token");
 
   const navigate = useNavigate();
 

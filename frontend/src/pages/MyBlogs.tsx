@@ -98,6 +98,7 @@ const MyBlogs = () => {
             );
           })}
         </div>
+      
       </div>
     </div>
   );

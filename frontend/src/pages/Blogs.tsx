@@ -43,7 +43,7 @@ const Blogs = () => {
   if (blogs.length === 0) {
   return (
     <div>
-      <AppBarShimmer />
+      <AppBar />
 
       <div className="flex justify-center px-2 mt-10 sm:px-0">
         <div className="w-full max-w-2xl text-center text-gray-500 flex flex-col items-center gap-4">

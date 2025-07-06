@@ -23,7 +23,7 @@ export const useBlog = ({ id }: { id: string }) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("token"),
         },
       });
      
@@ -64,7 +64,7 @@ export const useBlogs = () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("token"),
         },
       });
     
@@ -106,7 +106,7 @@ export const useMyBlogs = () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/api/v1/blog/us`, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: sessionStorage.getItem("token"),
         },
       });
     

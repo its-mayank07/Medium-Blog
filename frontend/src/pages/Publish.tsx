@@ -19,7 +19,7 @@ const Publish = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       navigate("/signin");
     }
@@ -61,7 +61,7 @@ const Publish = () => {
                     { title, content },
                     {
                       headers: {
-                        Authorization: localStorage.getItem("token") || "",
+                        Authorization: sessionStorage.getItem("token") || "",
                       },
                     }
                   );

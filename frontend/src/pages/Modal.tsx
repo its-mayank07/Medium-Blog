@@ -27,7 +27,7 @@ const Modal = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       navigate("/signin");
     }
@@ -45,7 +45,7 @@ const Modal = () => {
         },
         {
           headers: {
-            Authorization: localStorage.getItem("token") || "",
+            Authorization: sessionStorage.getItem("token") || "",
           },
         }
       );

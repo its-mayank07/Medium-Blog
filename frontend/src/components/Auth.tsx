@@ -29,11 +29,12 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const [isInvalid, setIsInvalid] = useState(false); // initially false
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function sendRequest() {
     setLoading(true);
+    setError(null);
     try {
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
@@ -41,16 +42,40 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
       );
       const jwt = response.data.jwt;
       
-      localStorage.setItem("token", jwt);
-      localStorage.setItem("userId", response.data.id);
+      sessionStorage.setItem("token", jwt);
+      sessionStorage.setItem("userId", response.data.id);
       dispatch(setUserId(response.data.id));
-      setIsInvalid(false);
       navigate("/blogs");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        setIsInvalid(true); // Show error
+        const status = error.response?.status;
+        switch (status) {
+          case 400:
+            setError("Please check your input and try again.");
+            break;
+          case 401:
+            setError("Invalid email or password.");
+            break;
+          case 403:
+            setError("Invalid email or password.");
+            break;
+          case 409:
+            setError("An account with this email already exists.");
+            break;
+          case 411:
+            setError("Please provide valid information.");
+            break;
+          case 422:
+            setError("Please provide valid information.");
+            break;
+          case 500:
+            setError("Server error. Please try again later.");
+            break;
+          default:
+            setError("An error occurred. Please try again.");
+        }
       } else {
-        alert("An unknown error occurred.");
+        setError("An unknown error occurred.");
       }
     } finally {
       setLoading(false);
@@ -113,7 +138,7 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
             }}
           />
 
-          {isInvalid && (
+          {error && (
             <div
               className="flex items-center gap-2 text-sm text-red-600 bg-red-100 px-3 py-2 rounded-md mt-1 border border-red-300"
               style={{
@@ -121,7 +146,7 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
               }}
             >
               <BiErrorCircle className="text-lg" />
-              Invalid email or password.
+              {error}
             </div>
           )}
 
