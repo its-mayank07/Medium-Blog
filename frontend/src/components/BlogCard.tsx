@@ -47,7 +47,7 @@ const BlogCard = ({
     try {
       await axios.delete(`${BACKEND_URL}/api/v1/blog/${id}`, {
         headers: {
-          Authorization: localStorage.getItem("token") || "",
+          Authorization: sessionStorage.getItem("token") || "",
         },
       });
       if (onDelete) onDelete(id);

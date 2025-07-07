@@ -11,12 +11,12 @@ const MyBlogs = () => {
    const [blogs, setBlogs] = useState(initialBlogs);
    const navigate = useNavigate();
  
-   useEffect(() => {
-     const token = localStorage.getItem("token");
-     if (!token) {
-       navigate("/signin");
-     }
-   }, [navigate]);
+     useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      navigate("/signin");
+    }
+  }, [navigate]);
  
    useEffect(() => {
      setBlogs(initialBlogs);

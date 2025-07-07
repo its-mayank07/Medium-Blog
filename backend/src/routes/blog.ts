@@ -73,12 +73,26 @@ blogRouter.put("/", async (c) => {
   try {
     const prisma = getPrisma(c.env.DATABASE_URL);
     const body = await c.req.json();
+    const userId = c.get("userId");
 
-     const {success} = updateBlogInput.safeParse(body);
-        if(!success){
-          c.status(411);
-          return c.json({message : "Inputs not correct"})
-        }
+    const {success} = updateBlogInput.safeParse(body);
+    if(!success){
+      c.status(411);
+      return c.json({message : "Inputs not correct"})
+    }
+
+    // First check if the blog exists and user is the author
+    const existingBlog = await prisma.post.findFirst({
+      where: {
+        id: body.id,
+        authorId: userId,
+      },
+    });
+
+    if (!existingBlog) {
+      c.status(403);
+      return c.json({ error: "You can only update your own blogs" });
+    }
 
     const blog = await prisma.post.update({
       where: { id: body.id },
@@ -90,6 +104,7 @@ blogRouter.put("/", async (c) => {
 
     return c.json({ id: blog.id });
   } catch (err) {
+    console.error("Update blog error:", err);
     c.status(500);
     return c.json({ error: "Failed to update blog post" });
   }
@@ -203,18 +218,34 @@ blogRouter.delete("/:id", async (c) => {
   try {
     const prisma = getPrisma(c.env.DATABASE_URL);
     const blogId = c.req.param("id");
+    const userId = c.get("userId");
 
-    const blog = await prisma.post.delete({
-      where : {
-        id : blogId
-      }
+    // First check if the blog exists and user is the author
+    const existingBlog = await prisma.post.findFirst({
+      where: {
+        id: blogId,
+        authorId: userId,
+      },
     });
 
-    return c.json({message : "Blog deleted successfully"})
+    if (!existingBlog) {
+      c.status(403);
+      return c.json({ error: "You can only delete your own blogs" });
+    }
+
+    // Delete the blog (comments will be automatically deleted due to cascade)
+    await prisma.post.delete({
+      where: {
+        id: blogId,
+      },
+    });
+
+    return c.json({ message: "Blog deleted successfully" });
   } catch (error) {
+    console.error("Delete blog error:", error);
     c.status(500);
     return c.json({
-      error: "Error while fetching the blog",
+      error: "Error while deleting the blog",
     });
   }
 });

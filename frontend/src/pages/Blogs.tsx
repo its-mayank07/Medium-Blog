@@ -11,7 +11,7 @@ const Blogs = () => {
   const [blogs, setBlogs] = useState(initialBlogs);
   const navigate = useNavigate();
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       navigate("/signin");
     }
