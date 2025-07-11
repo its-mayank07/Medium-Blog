@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
 
@@ -52,17 +53,19 @@ const CommentCard = ({
   const isSaving = savingComment === comment.id;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className="border-b border-gray-200 py-4">
       <div className="flex gap-3">
-        <Avatar name={comment.author.id} size="small" isDisable={true} />
+        <Avatar name={comment.author.id} size="small"/>
         
         <div className="flex-1 min-w-0">
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
+              <Link to={`/user/${comment.author.id}`}>
               <span className="font-semibold text-gray-900">
                 {comment.author.name || "Anonymous"}
               </span>
+          </Link>
               <span className="text-gray-500 text-sm">
                 {formatDate(comment.createdAt)}
               </span>

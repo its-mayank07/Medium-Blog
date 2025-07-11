@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import type { Blog } from "../hooks";
 import Avatar from './Avatar';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const generateAuthorBio = () => {
@@ -41,6 +41,7 @@ const FullBlog = ({ blog }: { blog: Blog }) => {
       </div>
 
       {/* Author Info */}
+      <Link to={`/user/${blog.author.id}`}>
       <div className="w-full lg:w-64 shrink-0 border-l border-gray-200 pl-6">
         <p className="text-sm text-gray-500 mb-2">Author</p>
         <div className="flex items-center gap-3">
@@ -51,6 +52,7 @@ const FullBlog = ({ blog }: { blog: Blog }) => {
           </div>
         </div>
       </div>
+      </Link>
     </div>
   );
 };

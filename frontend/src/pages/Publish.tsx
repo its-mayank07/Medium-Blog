@@ -16,6 +16,7 @@ const Publish = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,6 +31,12 @@ const Publish = () => {
       <AppBar />
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-10 py-8 sm:py-12">
+        {/* Error message */}
+        {error && (
+          <div className="mb-6 p-3 rounded bg-red-50 border border-red-200 text-red-700 text-sm font-medium">
+            {error}
+          </div>
+        )}
         {/* Title input */}
         <input
           onChange={(e) => setTitle(e.target.value)}
@@ -54,6 +61,19 @@ const Publish = () => {
           ) : (
             <button
               onClick={async () => {
+                setError(null);
+                if (!title.trim() && !content.trim()) {
+                  setError("Please enter a title and content.");
+                  return;
+                }
+                if (!title.trim()) {
+                  setError("Please enter a title.");
+                  return;
+                }
+                if (!content.trim()) {
+                  setError("Please enter content.");
+                  return;
+                }
                 setLoading(true);
                 try {
                   const response = await axios.post(
@@ -77,7 +97,7 @@ const Publish = () => {
                     typeof (error as { response?: { status?: number } }).response === "object" &&
                     (error as { response?: { status?: number } }).response?.status === 401
                   ) {
-                    navigate("/signup");
+                    navigate("/signin");
                   }
                 } finally {
                   setLoading(false);

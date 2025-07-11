@@ -32,6 +32,15 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Determine if the form is valid
+  const isSignup = type === "signup";
+  const name = isSignup ? (postInputs as SignupInput).name || "" : "";
+  const email = (postInputs as AuthInput).email || "";
+  const password = (postInputs as AuthInput).password || "";
+  const isFormValid = isSignup
+    ? name.trim() && email.trim() && password.trim()
+    : email.trim() && password.trim();
+
   async function sendRequest() {
     setLoading(true);
     setError(null);
@@ -63,7 +72,7 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
             setError("An account with this email already exists.");
             break;
           case 411:
-            setError("Please provide valid information.");
+            setError(type === "signin" ? "Invalid email or password." : "Please provide valid information.");
             break;
           case 422:
             setError("Please provide valid information.");
@@ -129,7 +138,7 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
           <LabelledInput
             type="password"
             label="Password"
-            placeholder="Enter your password"
+            placeholder="Enter your password(min 6 characters)"
             onChange={(e) => {
               setPostInputs((c) => ({
                 ...c,
@@ -155,8 +164,9 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
           <button
             onClick={sendRequest}
             type="button"
-            className="mt-2 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition-colors"
-            disabled={loading}
+            className={`mt-2 w-full text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 transition-colors
+    ${!isFormValid || loading ? "cursor-not-allowed" : ""}`}
+            disabled={loading || !isFormValid}
           >
             {type === "signup" ? "Sign Up" : "Sign In"}
           </button>

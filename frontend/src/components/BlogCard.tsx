@@ -60,8 +60,12 @@ const BlogCard = ({
     <div className="border-b border-gray-200 py-4 px-4 sm:px-6">
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-2 text-sm text-gray-600">
+          <Link to={`/user/${authorId}`}>
           <Avatar name={authorId} />
-          <span className="font-medium text-black">{authorName}</span>
+          </Link>
+          <Link to={`/user/${authorId}`}>
+          <span className="font-medium text-black hover:text-gray-800">{authorName}</span>
+          </Link>
           <span>·</span>
           <span>{publishedDate}</span>
         </div>
@@ -86,6 +90,7 @@ const BlogCard = ({
                     onClick={() => {
                       setShowMenu(false);
                       // TODO: handle update logic
+
                     }}
                   >
                     Update

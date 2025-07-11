@@ -9,6 +9,7 @@ import MyBlogs from "./pages/MyBlogs";
 import Modal from "./pages/Modal";
 import { Provider } from "react-redux";
 import store from "./stored/stores";
+import UserBlogs from "./pages/UserBlogs";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<MyBlogs />} />
+          <Route path="/user/:id" element={<UserBlogs />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/blog/:id" element={<Blog />} />

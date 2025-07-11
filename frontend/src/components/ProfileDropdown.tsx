@@ -38,17 +38,17 @@ const ProfileDropdown = () => {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-black"
       >
-        <Avatar name={userId} size="big" isDisable={true} />
+        <Avatar name={userId} size="big" />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-40 bg-white border pt-1 border-gray-200 rounded-lg shadow-md z-50">
+        <div className="absolute right-0 mt-2 w-44 bg-white border pt-1 border-gray-200 rounded-lg shadow-md z-50">
           <Link
             to="/profile"
-            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="flex flex-row items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
             onClick={() => setOpen(false)}
           >
-            <Avatar name={userId} size="small" isDisable={true} />
+            <Avatar name={userId} size="small"/>
             <span className="font-semibold text-gray-700 ml-2">Profile</span>
           </Link>
           <button

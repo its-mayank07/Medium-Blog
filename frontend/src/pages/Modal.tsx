@@ -58,7 +58,7 @@ const Modal = () => {
         typeof (error as { response?: { status?: number } }).response === "object" &&
         (error as { response?: { status?: number } }).response?.status === 401
       ) {
-        navigate("/signup");
+        navigate("/signin");
       }
     } finally {
       setLoading(false);
