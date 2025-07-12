@@ -1,6 +1,5 @@
 import AppBar from "../components/AppBar";
 import BlogCard from "../components/BlogCard";
-import BlogCardShimmer from "../components/Shimmer/BlogCardShimmer";
 import { useUserBlogs } from "../hooks";
 import type { Blog } from "../hooks";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,18 +50,7 @@ const UserBlogs = () => {
     return (
       <div>
         <AppBar />
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-start px-4 sm:px-6 lg:px-8 mt-8">
-          {/* Main (Stories) */}
-          <main className="flex-1">
-            <div className="space-y-6">
-              {[...Array(3)].map((_, i) => (
-                <BlogCardShimmer key={i} />
-              ))}
-            </div>
-          </main>
-          {/* Sidebar Skeleton */}
-          <UserBlogShimmer />
-        </div>
+        <UserBlogShimmer />
       </div>
     );
   }
