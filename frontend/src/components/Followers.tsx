@@ -36,7 +36,7 @@ export default function Followers({ id, refreshKey }: { id: string; refreshKey?:
       ) : userFollowers.length === 0 ? (
         <div className="text-gray-500 text-sm italic py-1">No followers yet.</div>
       ) : (
-        <div className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+        <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           <ul className="space-y-1">
             {userFollowers.map((follower) => (
               <li key={follower.id} className="py-1.5 px-2 hover:bg-gray-50 rounded-md transition-colors flex items-center gap-2 hover:cursor-pointer">
