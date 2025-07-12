@@ -89,12 +89,12 @@ const UserBlogs = () => {
                     </svg>
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    {isOwnProfile ? "Start writing your story" : "No stories yet"}
+                    {isOwnProfile ? "Start writing your Blog" : "No blogs yet"}
                   </h3>
                   <p className="text-gray-600 text-sm max-w-md mx-auto">
                     {isOwnProfile
-                      ? "Share your thoughts, experiences, and ideas with the world. Your first story is just a click away."
-                      : "This user hasn't published any stories yet."}
+                      ? "Share your thoughts, experiences, and ideas with the world. Your first Blog is just a click away."
+                      : "This user hasn't published any blogs yet."}
                   </p>
                   {isOwnProfile && (
                     <button
@@ -104,7 +104,7 @@ const UserBlogs = () => {
                       <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
-                      Write your first story
+                      Write your first Blog
                     </button>
                   )}
                 </div>
@@ -125,12 +125,12 @@ const UserBlogs = () => {
                   </svg>
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {isOwnProfile ? "Start writing your story" : "No stories yet"}
+                  {isOwnProfile ? "Start writing your Blog" : "No blogs yet"}
                 </h3>
                 <p className="text-gray-600 text-sm max-w-md mx-auto">
                   {isOwnProfile
-                    ? "Share your thoughts, experiences, and ideas with the world. Your first story is just a click away."
-                    : "This user hasn't published any stories yet."}
+                    ? "Share your thoughts, experiences, and ideas with the world. Your first Blog is just a click away."
+                    : "This user hasn't published any blogs yet."}
                 </p>
                 {isOwnProfile && (
                   <button
@@ -140,7 +140,7 @@ const UserBlogs = () => {
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
-                    Write your first story
+                    Write your first Blog
                   </button>
                 )}
               </div>
@@ -229,7 +229,7 @@ const UserBlogs = () => {
     );
   }
 
-  // Main Profile + Stories
+  // Main Profile + Blogs
   return (
     <div>
       <AppBar />

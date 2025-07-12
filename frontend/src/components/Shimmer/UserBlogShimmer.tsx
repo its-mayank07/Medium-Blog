@@ -11,7 +11,7 @@ export default function UserBlogShimmer() {
             </div>
           </div>
           <div className="flex flex-col md:flex-row md:items-start w-full">
-            {/* Main (Stories) Shimmer */}
+            {/* Main (Blogs) Shimmer */}
             <main className="flex-1">
               {/* Mobile: Blog content shimmer */}
               <div className="md:hidden">

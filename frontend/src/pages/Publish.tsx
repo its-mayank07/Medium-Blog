@@ -49,7 +49,7 @@ const Publish = () => {
         {/* Content textarea */}
         <textarea
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Tell your story..."
+          placeholder="Write your blog..."
           className="w-full text-base sm:text-lg placeholder-gray-500 text-gray-800 focus:outline-none min-h-[300px] resize-none"
           disabled={loading}
         />
