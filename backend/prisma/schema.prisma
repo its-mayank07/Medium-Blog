@@ -7,13 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Follow {
+  id          String   @id @default(uuid())
+  follower    User     @relation("Following", fields: [followerId], references: [id])
+  followerId  String
+  following   User     @relation("FollowedBy", fields: [followingId], references: [id])
+  followingId String
+
+  @@unique([followerId, followingId])
+}
+
 model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
-  name     String?
-  password String
-  posts    Post[]
-  comments Comment[]
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  posts     Post[]
+  comments  Comment[]
+  followers Follow[] @relation("FollowedBy")
+  following Follow[] @relation("Following")
 }
 
 model Post {

@@ -55,8 +55,9 @@ const CommentCard = ({
   return (
     <div className="border-b border-gray-200 py-4">
       <div className="flex gap-3">
+        <Link to={`/user/${comment.author.id}`} className="hover:cursor-pointer">
         <Avatar name={comment.author.id} size="small"/>
-        
+        </Link>
         <div className="flex-1 min-w-0">
           {/* Header */}
           <div className="flex items-center justify-between mb-3">

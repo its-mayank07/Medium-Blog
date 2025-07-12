@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import ProfileDropdown from "./ProfileDropdown";
+import ProfileDropdown from "./ProfileDropdown";  
+import { HiOutlineUserGroup } from "react-icons/hi";
 
 const AppBar = () => {
   return (
@@ -21,6 +22,11 @@ const AppBar = () => {
                 className="inline-flex items-center px-4 sm:px-5 py-2.5 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 Publish
+              </button>
+            </Link>
+            <Link to="/users">
+              <button className="inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md">
+                <HiOutlineUserGroup className="w-5 h-5" />
               </button>
             </Link>
             <ProfileDropdown />

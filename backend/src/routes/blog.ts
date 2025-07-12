@@ -114,12 +114,6 @@ blogRouter.put("/", async (c) => {
 blogRouter.get("/bulk", async (c) => {
   try {
     const prisma = getPrisma(c.env.DATABASE_URL);
-    // const userId = c.get("userId");
-
-    // const blog = await prisma.post.findMany({
-    //   where: { authorId: userId },
-    // });
-
      const blog = await prisma.post.findMany({
       select : {
         title : true,
@@ -129,7 +123,8 @@ blogRouter.get("/bulk", async (c) => {
         author : {
           select : {
             name : true,
-            id : true
+            id : true,
+            email : true
           }
         }
       },
@@ -146,7 +141,7 @@ blogRouter.get("/bulk", async (c) => {
     });
   }
 });
-
+// GET /user - Fetch all blogs by the user
 blogRouter.get("/us", async (c) => {
   try {
     const prisma = getPrisma(c.env.DATABASE_URL);
@@ -165,7 +160,8 @@ blogRouter.get("/us", async (c) => {
         author : {
           select : {
             name : true,
-            id : true
+            id : true,
+            email : true
           }
         }
       },
@@ -179,6 +175,97 @@ blogRouter.get("/us", async (c) => {
     c.status(500);
     return c.json({
       error: "Error while fetching the blogs of the user",
+    });
+  }
+});
+
+// GET /user/:id - Fetch all blogs by a specific user
+blogRouter.get("/user/:id", async (c) => {
+  try {
+    const prisma = getPrisma(c.env.DATABASE_URL);
+    const userId = c.req.param("id");
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      c.status(404);
+      return c.json({ error: "User doesn't exist" });
+    }
+
+    const blogs = await prisma.post.findMany({
+      where: { authorId: userId },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        publishedAt: true,
+        author: {
+          select: {
+            name: true,
+            id: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        publishedAt: "desc",
+      },
+    });
+
+    return c.json({ blog: blogs });
+  } catch (error) {
+    c.status(500);
+    return c.json({ error: "Error while fetching the user's blogs" });
+  }
+});
+
+// GET /following - Fetch all blogs from users that current user is following
+blogRouter.get("/following", async (c) => {
+  try {
+    const prisma = getPrisma(c.env.DATABASE_URL);
+    const currentUserId = c.get("userId");
+
+    // Get all users that current user is following
+    const following = await prisma.follow.findMany({
+      where: { followerId: currentUserId },
+      select: { followingId: true },
+    });
+
+    const followingIds = following.map(f => f.followingId);
+
+    // If user is not following anyone, return empty array
+    if (followingIds.length === 0) {
+      return c.json({ blog: [] });
+    }
+
+    // Get all blogs from users that current user is following
+    const blogs = await prisma.post.findMany({
+      where: { 
+        authorId: { in: followingIds } 
+      },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        publishedAt: true,
+        author: {
+          select: {
+            name: true,
+            id: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        publishedAt: "desc",
+      },
+    });
+
+    return c.json({ blog: blogs });
+  } catch (error) {
+    c.status(500);
+    return c.json({
+      error: "Error while fetching blogs from following users",
     });
   }
 });
@@ -199,7 +286,8 @@ blogRouter.get("/:id", async (c) => {
         author: {
           select : {
             name : true,
-            id : true
+            id : true,
+            email : true
           }
         }
       }
@@ -214,6 +302,8 @@ blogRouter.get("/:id", async (c) => {
   }
 });
 
+
+// Delete a blog post
 blogRouter.delete("/:id", async (c) => {
   try {
     const prisma = getPrisma(c.env.DATABASE_URL);

@@ -89,8 +89,6 @@ const BlogCard = ({
                     className="flex items-center w-full gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-xl transition-colors"
                     onClick={() => {
                       setShowMenu(false);
-                      // TODO: handle update logic
-
                     }}
                   >
                     Update
@@ -116,7 +114,7 @@ const BlogCard = ({
         <p className="text-gray-700 text-sm mt-1 line-clamp-2">
           {content.slice(0, 140)}...
         </p>
-        <div className="mt-4 text-sm text-gray-500">{readingTime} min read</div>
+        <div className="mt-4 text-sm text-gray-500">{readingTime} min read</div>    
       </Link>
     </div>
   );

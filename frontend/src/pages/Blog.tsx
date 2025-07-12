@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import FullBlog from "../components/FullBlog";
 import { useBlog } from "../hooks"
 import AppBar from "../components/AppBar";
-import FullBlogShimmer from "../components/FullBlogShimmer";
+import FullBlogShimmer from "../components/Shimmer/FullBlogShimmer";
 import Comments from "../components/Comments";
 import { useEffect } from "react";
 
