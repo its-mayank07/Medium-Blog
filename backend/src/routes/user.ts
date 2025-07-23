@@ -115,6 +115,69 @@ userRouter.post("/signin", async (c) => {
   }
 });
 
+// Get all users
+userRouter.get("/allusers", async (c) => {
+  // Check for authentication token
+  const token = c.req.header("authorization");
+  if (!token) {
+    c.status(401);
+    return c.json({ error: "Unauthorized - Token missing" });
+  }
+  
+  try {
+    // Verify the token
+    const decoded = await verify(token, c.env.JWT_SECRET_KEY);
+    if (!decoded || typeof decoded.id !== "string") {
+      c.status(401);
+      return c.json({ error: "Unauthorized - Invalid token" });
+    }
+
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
+
+    // Get counts for each user
+    const usersWithCounts = await Promise.all(
+      users.map(async (user) => {
+        const [postsCount, followersCount, followingCount] = await Promise.all([
+          prisma.post.count({ where: { authorId: user.id } }),
+          prisma.follow.count({ where: { followingId: user.id } }),
+          prisma.follow.count({ where: { followerId: user.id } }),
+        ]);
+
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          postsCount,
+          followersCount,
+          followingCount,
+        };
+      })
+    );
+
+    return c.json({ users: usersWithCounts });
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("jwt")) {
+      c.status(401);
+      return c.json({ error: "Unauthorized - Token verification failed" });
+    }
+    c.status(500);
+    return c.json({ error: "Error while fetching users" });
+  }
+});
+
 // Middleware: verify token (no Bearer required)
 userRouter.use("/:id/*", async (c, next) => {
   const token = c.req.header("authorization");
@@ -321,67 +384,6 @@ userRouter.get("/:id/is-following", async (c) => {
   return c.json({ isFollowing: !!existing });
 });
 
-// Get all users
-userRouter.get("/allusers", async (c) => {
-  // Check for authentication token
-  const token = c.req.header("authorization");
-  if (!token) {
-    c.status(401);
-    return c.json({ error: "Unauthorized - Token missing" });
-  }
-  
-  try {
-    // Verify the token
-    const decoded = await verify(token, c.env.JWT_SECRET_KEY);
-    if (!decoded || typeof decoded.id !== "string") {
-      c.status(401);
-      return c.json({ error: "Unauthorized - Invalid token" });
-    }
 
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
-
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
-
-    // Get counts for each user
-    const usersWithCounts = await Promise.all(
-      users.map(async (user) => {
-        const [postsCount, followersCount, followingCount] = await Promise.all([
-          prisma.post.count({ where: { authorId: user.id } }),
-          prisma.follow.count({ where: { followingId: user.id } }),
-          prisma.follow.count({ where: { followerId: user.id } }),
-        ]);
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          postsCount,
-          followersCount,
-          followingCount,
-        };
-      })
-    );
-
-    return c.json({ users: usersWithCounts });
-  } catch (error) {
-    if (error instanceof Error && error.message.includes("jwt")) {
-      c.status(401);
-      return c.json({ error: "Unauthorized - Token verification failed" });
-    }
-    c.status(500);
-    return c.json({ error: "Error while fetching users" });
-  }
-});
 
 export default userRouter;
